@@ -12,6 +12,7 @@
       color: #fff;
       padding: 50px;
       margin: 0;
+      overflow: hidden;
     }
     h1 {
       font-size: 2.5em;
@@ -19,17 +20,36 @@
     }
     p {
       font-size: 1.5em;
+      margin: 10px 0;
     }
     #contador {
       font-size: 1.8em;
       margin-top: 20px;
       font-weight: bold;
     }
-    footer {
-      margin-top: 40px;
-      font-size: 1em;
-      color: #fff;
+    .mensagem {
+      font-size: 1.2em;
+      opacity: 0.9;
+      margin-top: 20px;
+    }
+
+    /* Corações flutuantes */
+    .coracao {
+      position: fixed;
+      bottom: -50px;
+      font-size: 24px;
+      animation: subir 8s linear infinite;
       opacity: 0.8;
+    }
+    @keyframes subir {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) scale(0.8);
+        opacity: 0;
+      }
     }
   </style>
 </head>
@@ -38,9 +58,9 @@
   <p>Estamos juntos há:</p>
   <div id="contador"></div>
 
-  <footer>          Oii minha princesa, espero que você tenha gostado dessa surpresa.   </footer>
-  <footer>    Eu te amo demais, quero que você sempre saiba disso, e que eu sempre irei lutar pela gente.  </footer>
-   <footer>  Você estará para sempre no meu coração. EU TE AMO HOJE, TE AMEI ONTEM E VOU AMAR PRA SEMPRE! </footer>
+  <p class="mensagem">Oii minha princesa, espero que você tenha gostado dessa surpresa.</p>
+  <p class="mensagem">Eu te amo demais, quero que você sempre saiba disso, e que eu sempre irei lutar pela gente.</p>
+  <p class="mensagem">Você estará para sempre no meu coração. EU TE AMO HOJE, TE AMEI ONTEM E VOU AMAR PRA SEMPRE!</p>
 
   <script>
     const dataInicio = new Date("2025-07-18T00:00:00");
@@ -65,6 +85,27 @@
 
     setInterval(atualizarContador, 1000);
     atualizarContador();
+
+    // Criar corações
+    function criarCoracao() {
+      const coracao = document.createElement('div');
+      coracao.classList.add('coracao');
+      coracao.textContent = '❤️';
+
+      // Posição horizontal aleatória
+      coracao.style.left = Math.random() * 100 + 'vw';
+      // Tamanho aleatório
+      coracao.style.fontSize = (Math.random() * 20 + 20) + 'px';
+      // Duração da animação aleatória
+      coracao.style.animationDuration = (Math.random() * 4 + 4) + 's';
+
+      document.body.appendChild(coracao);
+
+      // Remover depois de 10s
+      setTimeout(() => coracao.remove(), 10000);
+    }
+
+    setInterval(criarCoracao, 500); // A cada 0.5s surge um coração
   </script>
 </body>
 </html>
