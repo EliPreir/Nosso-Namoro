@@ -1,12 +1,12 @@
    <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Elielso & Ana Beatriz</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: 'Arial', sans-serif;         
       text-align: center;
       background: linear-gradient(to right, #ffb6c1, #ff69b4);
       color: #fff;
@@ -32,7 +32,6 @@
       opacity: 0.9;
       margin-top: 20px;
     }
-
     /* Corações flutuantes */
     .coracao {
       position: fixed;
@@ -80,7 +79,7 @@
       const minutos = Math.floor((diff / (1000 * 60)) % 60);
       const segundos = Math.floor((diff / 1000) % 60);
 
-      contador.textContent = ${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos.;
+      contador.textContent = `${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos.`;
     }
 
     setInterval(atualizarContador, 1000);
@@ -92,20 +91,16 @@
       coracao.classList.add('coracao');
       coracao.textContent = '❤️';
 
-      // Posição horizontal aleatória
       coracao.style.left = Math.random() * 100 + 'vw';
-      // Tamanho aleatório
       coracao.style.fontSize = (Math.random() * 20 + 20) + 'px';
-      // Duração da animação aleatória
       coracao.style.animationDuration = (Math.random() * 4 + 4) + 's';
 
       document.body.appendChild(coracao);
 
-      // Remover depois de 10s
       setTimeout(() => coracao.remove(), 10000);
     }
 
-    setInterval(criarCoracao, 500); // A cada 0.5s surge um coração
+    setInterval(criarCoracao, 500);
   </script>
 </body>
-</html> 
+</html>
