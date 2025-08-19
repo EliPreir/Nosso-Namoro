@@ -58,6 +58,7 @@
       align-items: center;
       gap: 10px;
       font-family: Arial, sans-serif;
+      min-width: 300px;
     }
     #playPause {
       cursor: pointer;
@@ -79,6 +80,7 @@
       width: 0%;
       background: #ff69b4;
       border-radius: 3px;
+      transition: width 0.1s linear;
     }
     #tempo {
       font-size: 14px;
@@ -175,22 +177,33 @@
       return `${min.toString().padStart(2,'0')}:${seg.toString().padStart(2,'0')}`;
     }
 
-    playPause.addEventListener('click', () => {
-      if (musica.paused) {
-        musica.play();
-        playPause.textContent = '⏸️';
-      } else {
-        musica.pause();
-        playPause.textContent = '▶️';
-      }
+    // Atualiza tempo total quando áudio carregar
+    musica.addEventListener('loadedmetadata', () => {
+      tempo.textContent = `00:00 / ${formatarTempo(musica.duration)}`;
     });
 
+    // Atualiza barra de progresso
     musica.addEventListener('timeupdate', () => {
       const porcentagem = (musica.currentTime / musica.duration) * 100;
       progress.style.width = `${porcentagem}%`;
       tempo.textContent = `${formatarTempo(musica.currentTime)} / ${formatarTempo(musica.duration)}`;
     });
 
+    // Play / Pause
+    playPause.addEventListener('click', () => {
+      if (musica.paused) {
+        musica.play().then(() => {
+          playPause.textContent = '⏸️';
+        }).catch(() => {
+          alert('Clique no botão para iniciar a música');
+        });
+      } else {
+        musica.pause();
+        playPause.textContent = '▶️';
+      }
+    });
+
+    // Clicar na barra de progresso para avançar
     progressContainer.addEventListener('click', (e) => {
       const rect = progressContainer.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
@@ -198,6 +211,7 @@
       musica.currentTime = novaPos;
     });
 
+    // Quando música terminar
     musica.addEventListener('ended', () => {
       playPause.textContent = '▶️';
     });
