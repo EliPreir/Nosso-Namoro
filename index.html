@@ -40,14 +40,50 @@
       opacity: 0.8;
     }
     @keyframes subir {
-      0% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-110vh) scale(0.8);
-        opacity: 0;
-      }
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-110vh) scale(0.8); opacity: 0; }
+    }
+
+    /* Player estilo Spotify */
+    #player {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffffaa;
+      color: #ff69b4;
+      border-radius: 12px;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: Arial, sans-serif;
+    }
+    #playPause {
+      cursor: pointer;
+      font-size: 20px;
+      border: none;
+      background: none;
+      color: #ff69b4;
+    }
+    #progressContainer {
+      flex: 1;
+      height: 6px;
+      background: #ffc0cb88;
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+    }
+    #progress {
+      height: 100%;
+      width: 0%;
+      background: #ff69b4;
+      border-radius: 3px;
+    }
+    #tempo {
+      font-size: 14px;
+      min-width: 80px;
+      text-align: right;
     }
   </style>
 </head>
@@ -89,12 +125,12 @@
       if (meses < 0) { meses += 12; anos -= 1; }
 
       const partes = [];
-      if (anos > 0) partes.push(`${anos} ano${anos>1?'s':''}`);
-      if (meses > 0) partes.push(`${meses} mês${meses>1?'es':''}`);
-      if (dias > 0) partes.push(`${dias} dia${dias>1?'s':''}`);
-      if (horas > 0) partes.push(`${horas} hora${horas>1?'s':''}`);
-      if (minutos > 0) partes.push(`${minutos} minuto${minutos>1?'s':''}`);
-      if (segundos >= 0) partes.push(`${segundos} segundo${segundos>1?'s':''}`);
+      if (anos > 0) partes.push(`${anos} ano${anos > 1 ? 's' : ''}`);
+      if (anos > 0 || meses > 0) partes.push(`${meses} mês${meses > 1 ? 'es' : ''}`);
+      if (anos > 0 || meses > 0 || dias > 0) partes.push(`${dias} dia${dias > 1 ? 's' : ''}`);
+      if (horas > 0) partes.push(`${horas} hora${horas > 1 ? 's' : ''}`);
+      if (minutos > 0) partes.push(`${minutos} minuto${minutos > 1 ? 's' : ''}`);
+      if (segundos >= 0) partes.push(`${segundos} segundo${segundos > 1 ? 's' : ''}`);
 
       contador.textContent = partes.join(', ');
     }
@@ -115,36 +151,55 @@
     setInterval(criarCoracao, 500);
   </script>
 
-  <!-- Música com botão play/pause -->
-  <audio id="musica" src="./a1a604e0-39c7-44ff-998d-046148bff919.mp3" preload="auto"></audio>
+  <!-- Player estilo Spotify -->
+  <div id="player">
+    <button id="playPause">▶️</button>
+    <div id="progressContainer">
+      <div id="progress"></div>
+    </div>
+    <div id="tempo">00:00 / 00:00</div>
+  </div>
 
-  <button id="botaoMusica" style="
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    background-color: #ffffffaa;
-    color: #ff69b4;
-    cursor: pointer;
-  ">
-    ▶️ Play
-  </button>
+  <audio id="musica" src="./a1a604e0-39c7-44ff-998d-046148bff919.mp3" preload="auto"></audio>
 
   <script>
     const musica = document.getElementById('musica');
-    const botao = document.getElementById('botaoMusica');
+    const playPause = document.getElementById('playPause');
+    const progress = document.getElementById('progress');
+    const progressContainer = document.getElementById('progressContainer');
+    const tempo = document.getElementById('tempo');
 
-    botao.addEventListener('click', () => {
+    function formatarTempo(segundos) {
+      const min = Math.floor(segundos / 60);
+      const seg = Math.floor(segundos % 60);
+      return `${min.toString().padStart(2,'0')}:${seg.toString().padStart(2,'0')}`;
+    }
+
+    playPause.addEventListener('click', () => {
       if (musica.paused) {
         musica.play();
-        botao.innerHTML = '⏸️ Pause';
+        playPause.textContent = '⏸️';
       } else {
         musica.pause();
-        botao.innerHTML = '▶️ Play';
+        playPause.textContent = '▶️';
       }
+    });
+
+    musica.addEventListener('timeupdate', () => {
+      const porcentagem = (musica.currentTime / musica.duration) * 100;
+      progress.style.width = `${porcentagem}%`;
+      tempo.textContent = `${formatarTempo(musica.currentTime)} / ${formatarTempo(musica.duration)}`;
+    });
+
+    progressContainer.addEventListener('click', (e) => {
+      const rect = progressContainer.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const novaPos = (clickX / rect.width) * musica.duration;
+      musica.currentTime = novaPos;
+    });
+
+    musica.addEventListener('ended', () => {
+      playPause.textContent = '▶️';
     });
   </script>
 </body>
