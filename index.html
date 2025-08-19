@@ -90,7 +90,7 @@
 
       const partes = [];
       if (anos > 0) partes.push(`${anos} ano${anos>1?'s':''}`);
-      if (meses > 0) partes.push(`${meses} mes${meses>1?'es':''}`);
+      if (meses > 0) partes.push(`${meses} mês${meses>1?'es':''}`);
       if (dias > 0) partes.push(`${dias} dia${dias>1?'s':''}`);
       if (horas > 0) partes.push(`${horas} hora${horas>1?'s':''}`);
       if (minutos > 0) partes.push(`${minutos} minuto${minutos>1?'s':''}`);
@@ -116,7 +116,7 @@
   </script>
 
   <!-- Música com botão play/pause -->
-  <audio id="musica" src="https://cdn.musicas.site/mp3/tiago-iorc-amei-te-ver.mp3"></audio>
+  <audio id="musica" src="./a1a604e0-39c7-44ff-998d-046148bff919.mp3" preload="auto"></audio>
 
   <button id="botaoMusica" style="
     position: fixed;
@@ -140,10 +140,10 @@
     botao.addEventListener('click', () => {
       if (musica.paused) {
         musica.play();
-        botao.textContent = '⏸️ Pause';
+        botao.innerHTML = '⏸️ Pause';
       } else {
         musica.pause();
-        botao.textContent = '▶️ Play';
+        botao.innerHTML = '▶️ Play';
       }
     });
   </script>
