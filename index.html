@@ -66,27 +66,32 @@
 
     function atualizarContador() {
       const agora = new Date();
-      let diff = agora - dataInicio;
-
-      if (diff < 0) {
+      if (agora < dataInicio) {
         contador.textContent = "Nosso namoro ainda não começou!";
         return;
       }
 
-      const anos   = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
-      diff -= anos * 1000 * 60 * 60 * 24 * 365;
+      let anos = agora.getFullYear() - dataInicio.getFullYear();
+      let meses = agora.getMonth() - dataInicio.getMonth();
+      let dias = agora.getDate() - dataInicio.getDate();
 
-      const meses  = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
-      diff -= meses * 1000 * 60 * 60 * 24 * 30;
+      if (dias < 0) {
+        meses -= 1;
+        const ultimoDiaMesAnterior = new Date(agora.getFullYear(), agora.getMonth(), 0).getDate();
+        dias += ultimoDiaMesAnterior;
+      }
 
-      const dias   = Math.floor(diff / (1000 * 60 * 60 * 24));
-      diff -= dias * 1000 * 60 * 60 * 24;
+      if (meses < 0) {
+        anos -= 1;
+        meses += 12;
+      }
 
-      const horas  = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutos= Math.floor((diff / (1000 * 60)) % 60);
-      const segundos= Math.floor((diff / 1000) % 60);
+      const diffHoje = agora - new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+      const horas = Math.floor(diffHoje / (1000 * 60 * 60));
+      const minutos = Math.floor((diffHoje / (1000 * 60)) % 60);
+      const segundos = Math.floor((diffHoje / 1000) % 60);
 
-      contador.textContent = 
+      contador.textContent =
         `${anos} anos, ${meses} meses, ${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
     }
 
@@ -138,6 +143,7 @@
       }
     });
   </script>
+
 </body>
 </html>
 
