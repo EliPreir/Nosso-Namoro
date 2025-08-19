@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -32,7 +32,6 @@
       opacity: 0.9;
       margin-top: 20px;
     }
-    /* Corações flutuantes */
     .coracao {
       position: fixed;
       bottom: -50px;
@@ -85,22 +84,51 @@
     setInterval(atualizarContador, 1000);
     atualizarContador();
 
-    // Criar corações
     function criarCoracao() {
       const coracao = document.createElement('div');
       coracao.classList.add('coracao');
       coracao.textContent = '❤️';
-
       coracao.style.left = Math.random() * 100 + 'vw';
       coracao.style.fontSize = (Math.random() * 20 + 20) + 'px';
       coracao.style.animationDuration = (Math.random() * 4 + 4) + 's';
-
       document.body.appendChild(coracao);
-
       setTimeout(() => coracao.remove(), 10000);
     }
 
     setInterval(criarCoracao, 500);
+  </script>
+
+  <!-- Música com botão play/pause -->
+  <audio id="musica" src="https://cdn.musicas.site/mp3/tiago-iorc-amei-te-ver.mp3"></audio>
+
+  <button id="botaoMusica" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ffffffaa;
+    color: #ff69b4;
+    cursor: pointer;
+  ">
+    ▶️ Play
+  </button>
+
+  <script>
+    const musica = document.getElementById('musica');
+    const botao = document.getElementById('botaoMusica');
+
+    botao.addEventListener('click', () => {
+      if (musica.paused) {
+        musica.play();
+        botao.textContent = '⏸️ Pause';
+      } else {
+        musica.pause();
+        botao.textContent = '▶️ Play';
+      }
+    });
   </script>
 </body>
 </html>
