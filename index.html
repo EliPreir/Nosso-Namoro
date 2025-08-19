@@ -78,34 +78,25 @@
       let minutos = agora.getMinutes() - dataInicio.getMinutes();
       let segundos = agora.getSeconds() - dataInicio.getSeconds();
 
-      if (segundos < 0) {
-        segundos += 60;
-        minutos -= 1;
-      }
-
-      if (minutos < 0) {
-        minutos += 60;
-        horas -= 1;
-      }
-
-      if (horas < 0) {
-        horas += 24;
-        dias -= 1;
-      }
-
+      if (segundos < 0) { segundos += 60; minutos -= 1; }
+      if (minutos < 0) { minutos += 60; horas -= 1; }
+      if (horas < 0) { horas += 24; dias -= 1; }
       if (dias < 0) {
         meses -= 1;
         const ultimoDiaMesAnterior = new Date(agora.getFullYear(), agora.getMonth(), 0).getDate();
         dias += ultimoDiaMesAnterior;
       }
+      if (meses < 0) { meses += 12; anos -= 1; }
 
-      if (meses < 0) {
-        meses += 12;
-        anos -= 1;
-      }
+      const partes = [];
+      if (anos > 0) partes.push(`${anos} ano${anos>1?'s':''}`);
+      if (meses > 0) partes.push(`${meses} mes${meses>1?'es':''}`);
+      if (dias > 0) partes.push(`${dias} dia${dias>1?'s':''}`);
+      if (horas > 0) partes.push(`${horas} hora${horas>1?'s':''}`);
+      if (minutos > 0) partes.push(`${minutos} minuto${minutos>1?'s':''}`);
+      if (segundos >= 0) partes.push(`${segundos} segundo${segundos>1?'s':''}`);
 
-      contador.textContent =
-        `${anos} anos, ${meses} meses, ${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
+      contador.textContent = partes.join(', ');
     }
 
     setInterval(atualizarContador, 1000);
@@ -156,6 +147,5 @@
       }
     });
   </script>
-
 </body>
 </html>
