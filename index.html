@@ -82,7 +82,7 @@
   margin-bottom: 10px;  
 }  
 
-/* Botão com imagem de fundo */  
+/* Botão com foto e ícone centralizado */  
 #playPause {  
   cursor: pointer;  
   width: 120px;  
@@ -91,14 +91,24 @@
   border: none;  
   background: url("foto.jpg") center/cover no-repeat;  
   position: relative;  
-  font-size: 40px;  
-  color: white;  
-  text-shadow: 0 0 8px rgba(0,0,0,0.8);  
   display: flex;  
   align-items: center;  
   justify-content: center;  
   transition: transform 0.2s ease, box-shadow 0.2s ease;  
+  font-size: 0; /* esconde texto original */  
 }  
+
+#playPause::after {  
+  content: "▶️";  
+  font-size: 40px; /* tamanho do ícone */  
+  color: white;  
+  text-shadow: 0 0 8px rgba(0,0,0,0.8);  
+}  
+
+#playPause.playing::after {  
+  content: "⏸️";  
+}  
+
 #playPause:hover {  
   transform: scale(1.1);  
   box-shadow: 0 4px 12px rgba(0,0,0,0.6);  
@@ -208,7 +218,7 @@
     </div>  
 
     <div id="botoes">  
-      <button id="playPause">▶️</button>  
+      <button id="playPause"></button>  
     </div>  
 
     <div id="barra">  
@@ -249,10 +259,10 @@
     playPause.addEventListener('click', async () => {  
       if (musica.paused) {  
         await musica.play();  
-        playPause.textContent = '⏸️';  
+        playPause.classList.add('playing');  
       } else {  
         musica.pause();  
-        playPause.textContent = '▶️';  
+        playPause.classList.remove('playing');  
       }  
     });  
   
@@ -264,7 +274,7 @@
     });  
   
     musica.addEventListener('ended', () => {  
-      playPause.textContent = '▶️';  
+      playPause.classList.remove('playing');  
     });  
   </script>  
 </body>  
