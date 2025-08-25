@@ -162,7 +162,7 @@
     <div id="tempo">00:00 / 00:00</div>
   </div>
 
-  <audio id="musica" src="./a1a604e0-39c7-44ff-998d-046148bff919.mp3" preload="auto"></audio>
+  <audio id="musica" src="musica.mp3" preload="auto"></audio>
 
   <script>
     const musica = document.getElementById('musica');
@@ -187,26 +187,14 @@
       tempo.textContent = `${formatarTempo(musica.currentTime)} / ${formatarTempo(musica.duration)}`;
     });
 
-    // 🔥 Play / Pause com tratamento de erro
     playPause.addEventListener('click', async () => {
-      try {
-        if (musica.paused) {
-          await musica.play();
-          playPause.textContent = '⏸️';
-        } else {
-          musica.pause();
-          playPause.textContent = '▶️';
-        }
-      } catch (err) {
-        console.error("Erro ao tentar tocar a música:", err);
-        alert("⚠️ Não foi possível iniciar a música. Verifique se o navegador bloqueou ou se o arquivo existe.");
+      if (musica.paused) {
+        await musica.play();
+        playPause.textContent = '⏸️';
+      } else {
+        musica.pause();
+        playPause.textContent = '▶️';
       }
-    });
-
-    // 🔥 Avisar se o arquivo não for encontrado
-    musica.addEventListener('error', () => {
-      console.error("Erro ao carregar o arquivo de áudio:", musica.src);
-      alert("⚠️ O arquivo de áudio não foi encontrado!\n\nVerifique se o caminho está correto:\n" + musica.src);
     });
 
     progressContainer.addEventListener('click', (e) => {
