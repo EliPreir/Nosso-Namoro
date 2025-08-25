@@ -187,7 +187,7 @@
       tempo.textContent = `${formatarTempo(musica.currentTime)} / ${formatarTempo(musica.duration)}`;
     });
 
-    // 🔥 Aqui é a parte trocada
+    // 🔥 Play / Pause com tratamento de erro
     playPause.addEventListener('click', async () => {
       try {
         if (musica.paused) {
@@ -199,10 +199,15 @@
         }
       } catch (err) {
         console.error("Erro ao tentar tocar a música:", err);
-        alert("O navegador bloqueou a reprodução. Toque novamente no botão.");
+        alert("⚠️ Não foi possível iniciar a música. Verifique se o navegador bloqueou ou se o arquivo existe.");
       }
     });
-    // 🔥 fim da parte trocada
+
+    // 🔥 Avisar se o arquivo não for encontrado
+    musica.addEventListener('error', () => {
+      console.error("Erro ao carregar o arquivo de áudio:", musica.src);
+      alert("⚠️ O arquivo de áudio não foi encontrado!\n\nVerifique se o caminho está correto:\n" + musica.src);
+    });
 
     progressContainer.addEventListener('click', (e) => {
       const rect = progressContainer.getBoundingClientRect();
