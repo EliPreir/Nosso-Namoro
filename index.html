@@ -82,36 +82,35 @@
   margin-bottom: 10px;  
 }  
 
-/* Botão com foto e ícone centralizado */  
-#playPause {  
-  cursor: pointer;  
+/* Foto como botão de play/pause */  
+#fotoContainer {  
+  position: relative;  
   width: 120px;  
   height: 120px;  
   border-radius: 50%;  
-  border: none;  
-  background: url("foto.jpg") center/cover no-repeat;  
-  position: relative;  
-  display: flex;  
-  align-items: center;  
-  justify-content: center;  
+  overflow: hidden;  
+  cursor: pointer;  
   transition: transform 0.2s ease, box-shadow 0.2s ease;  
-  font-size: 0; /* esconde texto original */  
 }  
-
-#playPause::after {  
-  content: "▶️";  
-  font-size: 40px; /* tamanho do ícone */  
+#fotoContainer:hover {  
+  transform: scale(1.05);  
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);  
+}  
+#fotoMusica {  
+  width: 100%;  
+  height: 100%;  
+  object-fit: cover;  
+  border-radius: 50%;  
+}  
+#iconePlayPause {  
+  position: absolute;  
+  top: 50%;  
+  left: 50%;  
+  transform: translate(-50%, -50%);  
+  font-size: 40px;  
   color: white;  
   text-shadow: 0 0 8px rgba(0,0,0,0.8);  
-}  
-
-#playPause.playing::after {  
-  content: "⏸️";  
-}  
-
-#playPause:hover {  
-  transform: scale(1.1);  
-  box-shadow: 0 4px 12px rgba(0,0,0,0.6);  
+  pointer-events: none; /* clique passa pela foto */  
 }  
 
 #barra {  
@@ -218,7 +217,10 @@
     </div>  
 
     <div id="botoes">  
-      <button id="playPause"></button>  
+      <div id="fotoContainer">  
+        <img id="fotoMusica" src="foto.jpg" alt="Capa da Música">  
+        <span id="iconePlayPause">▶️</span>  
+      </div>  
     </div>  
 
     <div id="barra">  
@@ -234,7 +236,8 @@
 
   <script>  
     const musica = document.getElementById('musica');  
-    const playPause = document.getElementById('playPause');  
+    const fotoContainer = document.getElementById('fotoContainer');  
+    const iconePlayPause = document.getElementById('iconePlayPause');  
     const progress = document.getElementById('progress');  
     const progressContainer = document.getElementById('progressContainer');  
     const tempoAtual = document.getElementById('tempoAtual');  
@@ -256,13 +259,13 @@
       tempoAtual.textContent = formatarTempo(musica.currentTime);  
     });  
   
-    playPause.addEventListener('click', async () => {  
+    fotoContainer.addEventListener('click', async () => {  
       if (musica.paused) {  
         await musica.play();  
-        playPause.classList.add('playing');  
+        iconePlayPause.textContent = '⏸️';  
       } else {  
         musica.pause();  
-        playPause.classList.remove('playing');  
+        iconePlayPause.textContent = '▶️';  
       }  
     });  
   
@@ -274,7 +277,7 @@
     });  
   
     musica.addEventListener('ended', () => {  
-      playPause.classList.remove('playing');  
+      iconePlayPause.textContent = '▶️';  
     });  
   </script>  
 </body>  
