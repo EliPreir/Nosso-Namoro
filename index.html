@@ -128,8 +128,8 @@
 
       const partes = [];
       if (anos > 0) partes.push(`${anos} ano${anos > 1 ? 's' : ''}`);
-      if (anos > 0 || meses > 0) partes.push(`${meses} mês${meses > 1 ? 'es' : ''}`);
-      if (anos > 0 || meses > 0 || dias > 0) partes.push(`${dias} dia${dias > 1 ? 's' : ''}`);
+      if (meses > 0) partes.push(`${meses} mês${meses > 1 ? 'es' : ''}`);
+      if (dias > 0) partes.push(`${dias} dia${dias > 1 ? 's' : ''}`);
       if (horas > 0) partes.push(`${horas} hora${horas > 1 ? 's' : ''}`);
       if (minutos > 0) partes.push(`${minutos} minuto${minutos > 1 ? 's' : ''}`);
       if (segundos >= 0) partes.push(`${segundos} segundo${segundos > 1 ? 's' : ''}`);
@@ -177,33 +177,33 @@
       return `${min.toString().padStart(2,'0')}:${seg.toString().padStart(2,'0')}`;
     }
 
-    // Atualiza tempo total quando áudio carregar
     musica.addEventListener('loadedmetadata', () => {
       tempo.textContent = `00:00 / ${formatarTempo(musica.duration)}`;
     });
 
-    // Atualiza barra de progresso
     musica.addEventListener('timeupdate', () => {
       const porcentagem = (musica.currentTime / musica.duration) * 100;
       progress.style.width = `${porcentagem}%`;
       tempo.textContent = `${formatarTempo(musica.currentTime)} / ${formatarTempo(musica.duration)}`;
     });
 
-    // Play / Pause
-    playPause.addEventListener('click', () => {
-      if (musica.paused) {
-        musica.play().then(() => {
+    // 🔥 Aqui é a parte trocada
+    playPause.addEventListener('click', async () => {
+      try {
+        if (musica.paused) {
+          await musica.play();
           playPause.textContent = '⏸️';
-        }).catch(() => {
-          alert('Clique no botão para iniciar a música');
-        });
-      } else {
-        musica.pause();
-        playPause.textContent = '▶️';
+        } else {
+          musica.pause();
+          playPause.textContent = '▶️';
+        }
+      } catch (err) {
+        console.error("Erro ao tentar tocar a música:", err);
+        alert("O navegador bloqueou a reprodução. Toque novamente no botão.");
       }
     });
+    // 🔥 fim da parte trocada
 
-    // Clicar na barra de progresso para avançar
     progressContainer.addEventListener('click', (e) => {
       const rect = progressContainer.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
@@ -211,7 +211,6 @@
       musica.currentTime = novaPos;
     });
 
-    // Quando música terminar
     musica.addEventListener('ended', () => {
       playPause.textContent = '▶️';
     });
