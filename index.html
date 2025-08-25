@@ -1,136 +1,281 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nosso Namoro</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: linear-gradient(to bottom, #ff99cc, #ff66cc);
-      color: white;
-    }
+<!DOCTYPE html>  
+<html lang="pt-BR">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1" />  
+  <title>Elielso & Ana Beatriz</title>  
+  <style>  
+    body {  
+      font-family: 'Arial', sans-serif;           
+      text-align: center;  
+      background: linear-gradient(to bottom, #ffb6c1, #ff69b4, #000000);  
+      color: #fff;  
+      padding: 50px;  
+      margin: 0;  
+      overflow: hidden;  
+      min-height: 100vh;  
+    }  
+    h1 {  
+      font-size: 2.5em;  
+      margin-bottom: 20px;  
+    }  
+    p {  
+      font-size: 1.5em;  
+      margin: 10px 0;  
+    }  
+    #contador {  
+      font-size: 1.8em;  
+      margin-top: 20px;  
+      font-weight: bold;  
+    }  
+    .mensagem {  
+      font-size: 1.2em;  
+      opacity: 0.9;  
+      margin-top: 20px;  
+    }  
+    .coracao {  
+      position: fixed;  
+      bottom: -50px;  
+      font-size: 24px;  
+      animation: subir 8s linear infinite;  
+      opacity: 0.8;  
+    }  
+    @keyframes subir {  
+      0% { transform: translateY(0) scale(1); opacity: 1; }  
+      100% { transform: translateY(-110vh) scale(0.8); opacity: 0; }  
+    }  
 
-    h1 {
-      margin-top: 20px;
-      font-size: 2rem;
-    }
+/* PLAYER */  
+#player {  
+  position: fixed;  
+  bottom: 0;  
+  left: 0;  
+  width: 100%;  
+  background: rgba(0, 0, 0, 0.5);  
+  color: white;  
+  padding: 15px;  
+  box-sizing: border-box;  
+  display: flex;  
+  flex-direction: column;  
+  align-items: center;  
+  font-family: Arial, sans-serif;  
+  backdrop-filter: blur(6px);  
+}  
 
-    #contador {
-      font-size: 1.5rem;
-      margin: 20px 0;
-    }
+#info {  
+  text-align: center;  
+  margin-bottom: 10px;  
+}  
+#titulo {  
+  font-weight: bold;  
+  font-size: 16px;  
+}  
+#artista {  
+  font-size: 13px;  
+  color: #bbb;  
+}  
 
-    #mensagem {
-      margin: 20px;
-      font-size: 1.2rem;
-      line-height: 1.5;
-    }
+#botoes {  
+  display: flex;  
+  justify-content: center;  
+  align-items: center;  
+  margin-bottom: 10px;  
+}  
 
-    #player {
-      margin-top: 30px;
-      background: #5e1742;
-      padding: 20px;
-      border-radius: 20px;
-      display: inline-block;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      position: relative;
-    }
+/* Botão com foto e ícone centralizado */  
+#playPause {  
+  cursor: pointer;  
+  width: 120px;  
+  height: 120px;  
+  border-radius: 50%;  
+  border: none;  
+  background: url("foto.jpg") center/cover no-repeat;  
+  position: relative;  
+  display: flex;  
+  align-items: center;  
+  justify-content: center;  
+  transition: transform 0.2s ease, box-shadow 0.2s ease;  
+  font-size: 0; /* esconde texto original */  
+}  
 
-    #foto {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
+#playPause::after {  
+  content: "▶️";  
+  font-size: 40px; /* tamanho do ícone */  
+  color: white;  
+  text-shadow: 0 0 8px rgba(0,0,0,0.8);  
+}  
 
-    #foto:hover {
-      transform: scale(1.05);
-    }
+#playPause.playing::after {  
+  content: "⏸️";  
+}  
 
-    #musicaInfo {
-      margin-top: 15px;
-      font-size: 1rem;
-    }
+#playPause:hover {  
+  transform: scale(1.1);  
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);  
+}  
 
-    #barra {
-      width: 100%;
-      margin-top: 10px;
-    }
-  </style>
-</head>
-<body>
-  <h1>Elielso ❤️ Ana Beatriz</h1>
-  <p>Estamos juntos há:</p>
-  <div id="contador"></div>
+#barra {  
+  display: flex;  
+  align-items: center;  
+  width: 90%;  
+  gap: 10px;  
+  font-size: 12px;  
+  color: #bbb;  
+}  
 
-  <div id="mensagem">
-    Oii minha princesa, espero que você tenha gostado dessa surpresa.<br><br>
-    Eu te amo demais, quero que você sempre saiba disso, e que eu sempre irei lutar pela gente.<br><br>
-    Você estará para sempre no meu coração. EU TE AMO HOJE, TE AMEI ONTEM E VOU AMAR PRA SEMPRE!
-  </div>
+#progressContainer {  
+  flex: 1;  
+  height: 5px;  
+  background: #444;  
+  border-radius: 3px;  
+  cursor: pointer;  
+  position: relative;  
+}  
 
-  <div id="player">
-    <!-- a foto é o botão play/pause -->
-    <img id="foto" src="sua-foto.jpg" alt="Foto do casal">
-    <div id="musicaInfo">
-      <strong>Amei Te Ver</strong><br>Tiago Iorc
-    </div>
-    <input type="range" id="barra" value="0" step="1">
-  </div>
+#progress {  
+  height: 100%;  
+  width: 0%;  
+  background: #1db954;  
+  border-radius: 3px;  
+}  
 
-  <!-- player de áudio escondido -->
-  <audio id="musica" src="TIAGO IORC - Amei Te Ver (Clipe Oficial) (1) (1).mp3" preload="auto" controlslist="nodownload noplaybackrate" style="display: none;"></audio>
+#tempoAtual, #tempoTotal {  
+  font-size: 12px;  
+  color: #bbb;  
+}  
 
-  <script>
-    const musica = document.getElementById("musica");
-    const foto = document.getElementById("foto");
-    const barra = document.getElementById("barra");
+  </style>  
+</head>  
+<body>  
+  <h1>Elielso ❤️ Ana Beatriz</h1>  
+  <p>Estamos juntos há:</p>  
+  <div id="contador"></div>  
 
-    // clique na foto controla play/pause
-    foto.addEventListener("click", async () => {
-      if (musica.paused) {
-        await musica.play();
-      } else {
-        musica.pause();
-      }
-    });
+  <p class="mensagem">Oii minha princesa, espero que você tenha gostado dessa surpresa.</p>  
+  <p class="mensagem">Eu te amo demais, quero que você sempre saiba disso, e que eu sempre irei lutar pela gente.</p>  
+  <p class="mensagem">Você estará para sempre no meu coração. EU TE AMO HOJE, TE AMEI ONTEM E VOU AMAR PRA SEMPRE!</p>  
 
-    // atualizar barra de progresso
-    musica.addEventListener("timeupdate", () => {
-      barra.max = musica.duration;
-      barra.value = musica.currentTime;
-    });
+  <script>  
+    const dataInicio = new Date("2025-07-18T00:00:00");  
+    const contador = document.getElementById("contador");  
+  
+    function atualizarContador() {  
+      const agora = new Date();  
+      if (agora < dataInicio) {  
+        contador.textContent = "Nosso namoro ainda não começou!";  
+        return;  
+      }  
+  
+      let anos = agora.getFullYear() - dataInicio.getFullYear();  
+      let meses = agora.getMonth() - dataInicio.getMonth();  
+      let dias = agora.getDate() - dataInicio.getDate();  
+      let horas = agora.getHours() - dataInicio.getHours();  
+      let minutos = agora.getMinutes() - dataInicio.getMinutes();  
+      let segundos = agora.getSeconds() - dataInicio.getSeconds();  
+  
+      if (segundos < 0) { segundos += 60; minutos -= 1; }  
+      if (minutos < 0) { minutos += 60; horas -= 1; }  
+      if (horas < 0) { horas += 24; dias -= 1; }  
+      if (dias < 0) {  
+        meses -= 1;  
+        const ultimoDiaMesAnterior = new Date(agora.getFullYear(), agora.getMonth(), 0).getDate();  
+        dias += ultimoDiaMesAnterior;  
+      }  
+      if (meses < 0) { meses += 12; anos -= 1; }  
+  
+      const partes = [];  
+      if (anos > 0) partes.push(`${anos} ano${anos > 1 ? 's' : ''}`);  
+      if (meses > 0) partes.push(`${meses} mês${meses > 1 ? 'es' : ''}`);  
+      if (dias > 0) partes.push(`${dias} dia${dias > 1 ? 's' : ''}`);  
+      if (horas > 0) partes.push(`${horas} hora${horas > 1 ? 's' : ''}`);  
+      if (minutos > 0) partes.push(`${minutos} minuto${minutos > 1 ? 's' : ''}`);  
+      if (segundos >= 0) partes.push(`${segundos} segundo${segundos > 1 ? 's' : ''}`);  
+  
+      contador.textContent = partes.join(', ');  
+    }  
+  
+    setInterval(atualizarContador, 1000);  
+    atualizarContador();  
+  
+    function criarCoracao() {  
+      const coracao = document.createElement('div');  
+      coracao.classList.add('coracao');  
+      coracao.textContent = '❤️';  
+      coracao.style.left = Math.random() * 100 + 'vw';  
+      coracao.style.fontSize = (Math.random() * 20 + 20) + 'px';  
+      coracao.style.animationDuration = (Math.random() * 4 + 4) + 's';  
+      document.body.appendChild(coracao);  
+      setTimeout(() => coracao.remove(), 10000);  
+    }  
+    setInterval(criarCoracao, 500);  
+  </script>  
 
-    // arrastar barra para mudar posição
-    barra.addEventListener("input", () => {
-      musica.currentTime = barra.value;
-    });
+  <!-- Player -->  
+  <div id="player">  
+    <div id="info">  
+      <div id="titulo">Amei Te Ver</div>  
+      <div id="artista">Tiago Iorc</div>  
+    </div>  
 
-    // contador de tempo de namoro
-    const inicio = new Date("2024-07-18T00:00:00"); // data de início
-    const contador = document.getElementById("contador");
+    <div id="botoes">  
+      <button id="playPause"></button>  
+    </div>  
 
-    function atualizarContador() {
-      const agora = new Date();
-      const diff = agora - inicio;
+    <div id="barra">  
+      <span id="tempoAtual">0:00</span>  
+      <div id="progressContainer">  
+        <div id="progress"></div>  
+      </div>  
+      <span id="tempoTotal">0:00</span>  
+    </div>  
+  </div>  
 
-      const meses = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
-      const dias = Math.floor((diff / (1000 * 60 * 60 * 24)) % 30);
-      const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutos = Math.floor((diff / (1000 * 60)) % 60);
-      const segundos = Math.floor((diff / 1000) % 60);
+  <audio id="musica" src="TIAGO IORC - Amei Te Ver (Clipe Oficial) (1) (1).mp3" preload="auto"></audio>  
 
-      contador.textContent =
-        `${meses} meses, ${dias} dias, ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
-    }
-
-    setInterval(atualizarContador, 1000);
-    atualizarContador();
-  </script>
-</body>
+  <script>  
+    const musica = document.getElementById('musica');  
+    const playPause = document.getElementById('playPause');  
+    const progress = document.getElementById('progress');  
+    const progressContainer = document.getElementById('progressContainer');  
+    const tempoAtual = document.getElementById('tempoAtual');  
+    const tempoTotal = document.getElementById('tempoTotal');  
+  
+    function formatarTempo(segundos) {  
+      const min = Math.floor(segundos / 60);  
+      const seg = Math.floor(segundos % 60);  
+      return `${min}:${seg.toString().padStart(2,'0')}`;  
+    }  
+  
+    musica.addEventListener('loadedmetadata', () => {  
+      tempoTotal.textContent = formatarTempo(musica.duration);  
+    });  
+  
+    musica.addEventListener('timeupdate', () => {  
+      const porcentagem = (musica.currentTime / musica.duration) * 100;  
+      progress.style.width = `${porcentagem}%`;  
+      tempoAtual.textContent = formatarTempo(musica.currentTime);  
+    });  
+  
+    playPause.addEventListener('click', async () => {  
+      if (musica.paused) {  
+        await musica.play();  
+        playPause.classList.add('playing');  
+      } else {  
+        musica.pause();  
+        playPause.classList.remove('playing');  
+      }  
+    });  
+  
+    progressContainer.addEventListener('click', (e) => {  
+      const rect = progressContainer.getBoundingClientRect();  
+      const clickX = e.clientX - rect.left;  
+      const novaPos = (clickX / rect.width) * musica.duration;  
+      musica.currentTime = novaPos;  
+    });  
+  
+    musica.addEventListener('ended', () => {  
+      playPause.classList.remove('playing');  
+    });  
+  </script>  
+</body>  
 </html>
