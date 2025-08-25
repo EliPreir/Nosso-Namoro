@@ -8,12 +8,13 @@
     body {
       font-family: 'Arial', sans-serif;         
       text-align: center;
-      /* Degradê do rosa para preto */
+      /* Degradê do rosa para preto ocupando toda a tela */
       background: linear-gradient(to bottom, #ffb6c1, #ff69b4, #000000);
       color: #fff;
       padding: 50px;
       margin: 0;
       overflow: hidden;
+      min-height: 100vh;
     }
     h1 {
       font-size: 2.5em;
@@ -45,13 +46,13 @@
       100% { transform: translateY(-110vh) scale(0.8); opacity: 0; }
     }
 
-    /* Player estilo Spotify atualizado */
+    /* Player estilo Spotify transparente */
     #player {
       position: fixed;
       bottom: 0;
       left: 0;
       width: 100%;
-      background: #1c1c1c;
+      background: rgba(0, 0, 0, 0.5); /* transparente */
       color: white;
       padding: 15px;
       box-sizing: border-box;
@@ -59,6 +60,7 @@
       flex-direction: column;
       align-items: center;
       font-family: Arial, sans-serif;
+      backdrop-filter: blur(6px); /* efeito vidro fosco */
     }
 
     #info {
@@ -198,8 +200,8 @@
   <!-- Player estilo Spotify atualizado -->
   <div id="player">
     <div id="info">
-      <div id="titulo">Join the Party</div>
-      <div id="artista">JT Music</div>
+      <div id="titulo">Amei Te Ver</div>
+      <div id="artista">Tiago Iorc</div>
     </div>
 
     <div id="botoes">
@@ -264,4 +266,3 @@
   </script>
 </body>
 </html>
-
